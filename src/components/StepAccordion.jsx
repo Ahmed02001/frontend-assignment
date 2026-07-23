@@ -66,7 +66,7 @@ export default function StepAccordion({
         </span>
       </button>
 
-      {isOpen ? <div className="px-6">{children}</div> : null}
+      {isOpen ? <div>{children}</div> : null}
     </div>
   );
 }
