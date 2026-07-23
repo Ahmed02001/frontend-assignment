@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Monitor, Rss, Shield, Grid3x3 } from "lucide-react";
 import StepAccordion from "@/components/StepAccordion.jsx";
+import productsData from "@/data/products.json";
+import ProductCard from "./ProductCard";
+import NextButton from "@components/NextButton.jsx";
 
 export default function BuilderSteps() {
   const [openStep, setOpenStep] = useState(1);
@@ -79,7 +81,14 @@ export default function BuilderSteps() {
         selectedSummary="2 selected"
         onToggle={() => toggleStep(1)}
       >
-        {/* CameraStep content goes here */}
+        <div className="flex gap-3.75 overflow-auto scrollbar-none pb-2 lg:grid lg:grid-cols-2 lg:overflow-visible px-3.75">
+          {productsData.cameras.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+        <div className="pt-[15px] pb-[20px] flex justify-center">
+          <NextButton label="Next: Choose your sensors" />
+        </div>
       </StepAccordion>
       <StepAccordion
         stepNumber={2}
