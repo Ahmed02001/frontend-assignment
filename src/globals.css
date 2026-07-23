@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Gilroy-Medium";
+  src: url("../public/fonts/Gilroy-Medium.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Gilroy-SemiBold";
+  src: url("../public/fonts/Gilroy-SemiBold.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@theme {
+  --color-text: #6b6375;
+  --color-text-h: #08060d;
+  --color-bg: #fff;
+  --color-border: #e5e4e7;
+  --color-code-bg: #f4f3ec;
+  --color-accent: #aa3bff;
+  --color-accent-bg: rgba(170, 59, 255, 0.1);
+  --color-accent-border: rgba(170, 59, 255, 0.5);
+  --color-social-bg: rgba(244, 243, 236, 0.5);
+
+  --shadow-card:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+
+  --font-sans: system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-heading: system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, Consolas, monospace;
+
+  --tracking-body: 0.18px;
+  --tracking-h1: -1.68px;
+  --tracking-h2: -0.24px;
+
+  --text-h1: 56px;
+  --text-h1--line-height: 1;
+  --text-h1-sm: 36px;
+  --text-h1-sm--line-height: 1;
+
+  --text-h2: 24px;
+  --text-h2--line-height: 118%;
+  --text-h2-sm: 20px;
+  --text-h2-sm--line-height: 118%;
+
+  --text-code: 15px;
+  --text-code--line-height: 135%;
+
+  --width-root: 1126px;
+}
+
+/* -----------------------------------------------------------------------
+   Dark-mode palette swap. Same variable names, new values, gated by the
+   OS preference — exactly like the original file, just now feeding
+   Tailwind-generated utilities instead of hand-written CSS.
+------------------------------------------------------------------------ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text: #9ca3af;
+    --color-text-h: #f3f4f6;
+    --color-bg: #16171d;
+    --color-border: #2e303a;
+    --color-code-bg: #1f2028;
+    --color-accent: #c084fc;
+    --color-accent-bg: rgba(192, 132, 252, 0.15);
+    --color-accent-border: rgba(192, 132, 252, 0.5);
+    --color-social-bg: rgba(47, 48, 58, 0.5);
+    --shadow-card:
+      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  }
+}

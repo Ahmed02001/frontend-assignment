@@ -1,10 +1,11 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import "./styles/index.css";
-import HomePage from "./pages/home/home-page.jsx";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./globals.css";
 
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
+import HomePage from "./pages/HomePage.jsx";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
     <HomePage />
-  </StrictMode>,
+  </React.StrictMode>,
 );
