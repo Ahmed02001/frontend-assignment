@@ -30,11 +30,16 @@ export default function StepAccordion({
           </span>
 
           <span className="flex items-center gap-2">
-            {isOpen && selectedSummary ? (
-              <span className="text-[15px] font-medium text-[#6d3bff]">
+            {selectedSummary && (
+              <span
+                className={`text-[15px] font-medium text-[#6d3bff] ${
+                  isOpen ? "block" : "block md:hidden"
+                }`}
+              >
                 {selectedSummary}
               </span>
-            ) : null}
+            )}
+
             {isOpen ? (
               <svg
                 width="10"
