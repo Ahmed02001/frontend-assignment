@@ -131,10 +131,17 @@
       "badge": null,
       "name": "Wyze Sense Motion Sensor",
       "tagline": "Detects movement and triggers your cameras and alerts.",
-      "learnMoreUrl": null,
-      "colors": [],
-      "defaultColor": null,
-      "originalPrice": null,
+      "learnMoreUrl": "#",
+      "mainImage": "/images/sensors/sensor1.png",
+      "colors": [
+        {
+          "id": "white",
+          "label": "White",
+          "image": "/images/sensors/sensor1.png"
+        }
+      ],
+      "defaultColor": "white",
+      "originalPrice": 43.99,
       "salePrice": 29.99,
       "defaultQuantity": 2,
       "minQuantity": 0,
@@ -142,17 +149,60 @@
     },
     {
       "id": "wyze-sense-hub",
-      "badge": "Save 100%",
-      "name": "Wyze Sense Hub (Required)",
+      "badge": "FREE",
+      "name": "Wyze Sense Hub",
       "tagline": "Connects your sensors for local, low-latency alerts.",
-      "learnMoreUrl": null,
-      "colors": [],
-      "defaultColor": null,
-      "originalPrice": 29.92,
+      "learnMoreUrl": "#",
+      "mainImage": "/images/sensors/sensor2.png",
+      "colors": [
+        {
+          "id": "white",
+          "label": "White",
+          "image": "/images/sensors/sensor2.png"
+        }
+      ],
+      "defaultColor": "white",
+      "originalPrice": 29.99,
       "salePrice": 0.0,
       "defaultQuantity": 1,
       "minQuantity": 1,
       "maxQuantity": 1
+    },
+    {
+      "id": "wenzhiiot-presence-sensor",
+      "badge": null,
+      "name": "WenzhiIoT Zigbee Presence Sensor",
+      "tagline": "24GHz mmWave radar detects presence, motion, and light levels — with built-in 16A relay.",
+      "learnMoreUrl": "#",
+      "mainImage": "/images/sensors/sensor3.png",
+      "colors": [
+        {
+          "id": "white",
+          "label": "White",
+          "image": "/images/sensors/sensor3.png"
+        }
+      ],
+      "defaultColor": "white",
+      "originalPrice": 39.99,
+      "salePrice": 25.99,
+      "defaultQuantity": 0,
+      "minQuantity": 0,
+      "maxQuantity": 10
+    },
+    {
+      "id": "chtoocy-solar-motion-alarm",
+      "badge": null,
+      "name": "Chtoocy Solar Motion Sensor Alarm",
+      "tagline": "Radar + IR dual detection with 130dB alarm, dog-bark sound, and strobe light to deter intruders and animals.",
+      "learnMoreUrl": "#",
+      "mainImage": "/images/sensors/sensor4.png",
+      "colors": [],
+      "defaultColor": null,
+      "originalPrice": 30,
+      "salePrice": 20.99,
+      "defaultQuantity": 0,
+      "minQuantity": 0,
+      "maxQuantity": 10
     }
   ],
   "accessories": [

@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import { useState, useMemo } from "react";
 import StepAccordion from "@/components/StepAccordion.jsx";
 import productsData from "@/data/products.json";
 import ProductCard from "./ProductCard";
 import NextButton from "@components/NextButton.jsx";
+import { makeSelectCountByCategory } from "@/redux/cartSelectors";
+import { useSelector } from "react-redux";
 
 export default function BuilderSteps() {
   const [openStep, setOpenStep] = useState(1);
@@ -10,8 +12,27 @@ export default function BuilderSteps() {
   const toggleStep = (stepNumber) => {
     setOpenStep((current) => (current === stepNumber ? null : stepNumber));
   };
+
+  const selectCameraCount = useMemo(
+    () => makeSelectCountByCategory("cameras"),
+    [],
+  );
+  const selectPlanCount = useMemo(() => makeSelectCountByCategory("plans"), []);
+  const selectSensorCount = useMemo(
+    () => makeSelectCountByCategory("sensors"),
+    [],
+  );
+  const selectExtrasCount = useMemo(
+    () => makeSelectCountByCategory("extras"),
+    [],
+  );
+
+  const cameraCount = useSelector(selectCameraCount);
+  const planCount = useSelector(selectPlanCount);
+  const sensorCount = useSelector(selectSensorCount);
+  const extrasCount = useSelector(selectExtrasCount);
   return (
-    <div className="w-full lg:w-3xl h-244.5 rounded-[10px]  border-[#1F1F1F] bg-[#EDF4FF]">
+    <div className="w-full xl:w-3xl h-244.5 rounded-[10px]  border-[#1F1F1F] bg-[#EDF4FF]">
       <StepAccordion
         stepNumber={1}
         title="Choose your cameras"
@@ -78,16 +99,23 @@ export default function BuilderSteps() {
           </svg>
         }
         isOpen={openStep === 1}
-        selectedSummary="2 selected"
+        selectedSummary={`${cameraCount} selected`}
         onToggle={() => toggleStep(1)}
       >
-        <div className="flex gap-3.75 overflow-auto scrollbar-none pb-2 lg:grid lg:grid-cols-2 lg:overflow-visible px-3.75">
+        <div className="flex gap-3.75 overflow-auto scrollbar-none pb-2 xl:grid xl:grid-cols-2 xl:overflow-visible px-3.75">
           {productsData.cameras.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              category="cameras"
+            />
           ))}
         </div>
-        <div className="pt-[15px] pb-[20px] flex justify-center">
-          <NextButton label="Next: Choose your sensors" />
+        <div className="pt-3.75 pb-5 flex justify-center">
+          <NextButton
+            label="Next: Choose your sensors"
+            onClick={() => toggleStep(1)}
+          />
         </div>
       </StepAccordion>
       <StepAccordion
@@ -181,10 +209,24 @@ export default function BuilderSteps() {
           </svg>
         }
         isOpen={openStep === 3}
-        selectedSummary="3 selected"
+        selectedSummary={`${sensorCount} selected`}
         onToggle={() => toggleStep(3)}
       >
-        {/* CameraStep content goes here */}
+        <div className="flex gap-3.75 overflow-auto scrollbar-none pb-2 xl:grid xl:grid-cols-2 xl:overflow-visible px-3.75">
+          {productsData.sensors.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              category="sensors"
+            />
+          ))}
+        </div>
+        <div className="pt-3.75 pb-5 flex justify-center">
+          <NextButton
+            label="Next: Add extra protection"
+            onClick={() => toggleStep(3)}
+          />
+        </div>
       </StepAccordion>
       <StepAccordion
         stepNumber={4}
