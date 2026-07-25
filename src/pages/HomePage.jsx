@@ -20,8 +20,9 @@ function buildInitialCart(productsData) {
         minQuantity: product.minQuantity ?? 0,
         maxQuantity: product.maxQuantity ?? 10,
         color: product.defaultColor ?? null,
-        price: product.salePrice,
-        originalPrice: product.originalPrice,
+        price: product.salePrice ?? product.originalPrice ?? 0,
+        required: product.required ?? false,
+        billingPeriod: product.billingPeriod ?? null,
       };
     });
   };

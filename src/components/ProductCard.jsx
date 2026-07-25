@@ -16,7 +16,7 @@ export default function ProductCard({ product, category }) {
   // isCardSelected now lives in the Redux cart slice (persisted via
   // redux-persist), instead of local useState — so the highlighted border
   // survives a page refresh instead of resetting.
-  const isCardSelected = item?.cardSelected ?? false;
+  const isCardSelected = (item?.quantity ?? 0) > (product.minQuantity ?? 0);
 
   const minQty = product.minQuantity ?? 0;
   const maxQty = product.maxQuantity ?? 99;

@@ -120,13 +120,13 @@ export default function ReviewPanel() {
               </div>
               <div>
                 {originalTotal > total && (
-                  <div className="font-['Gilroy-Medium'] font-normal text-[18px] leading-[20px] tracking-[0.0025em] text-center line-through text-[#6F7882]">
+                  <span className="font-['Gilroy-Medium'] font-normal text-[18px] leading-[20px] tracking-[0.0025em] text-center line-through text-[`#6F7882`] mr-2">
                     ${originalTotal.toFixed(2)}
-                    <span className="inline-block text-right align-middle font-['Gilroy-Bold'] font-normal text-[24px] leading-[32px] ml-[8px] text-[#4E2FD2]">
-                      ${total.toFixed(2)}
-                    </span>
-                  </div>
+                  </span>
                 )}
+                <span className="inline-block text-right align-middle font-['Gilroy-Bold'] font-normal text-[24px] leading-[32px] text-[`#4E2FD2`]">
+                  ${total.toFixed(2)}
+                </span>
               </div>
             </div>
           </div>

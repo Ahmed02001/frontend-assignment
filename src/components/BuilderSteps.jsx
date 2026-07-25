@@ -104,7 +104,11 @@ export default function BuilderSteps() {
       >
         <div className="flex gap-3.75 overflow-auto scrollbar-none pb-2 xl:grid xl:grid-cols-2 xl:overflow-visible px-3.75">
           {productsData.cameras.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              category="cameras"
+            />
           ))}
         </div>
         <div className="pt-3.75 pb-5 flex justify-center">
@@ -210,7 +214,11 @@ export default function BuilderSteps() {
       >
         <div className="flex gap-3.75 overflow-auto scrollbar-none pb-2 xl:grid xl:grid-cols-2 xl:overflow-visible px-3.75">
           {productsData.sensors.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              category="sensors"
+            />
           ))}
         </div>
         <div className="pt-3.75 pb-5 flex justify-center">

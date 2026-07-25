@@ -166,7 +166,7 @@
       "salePrice": 0.0,
       "defaultQuantity": 1,
       "minQuantity": 1,
-      "maxQuantity": 10
+      "maxQuantity": 1
     },
     {
       "id": "wenzhiiot-presence-sensor",
