@@ -24,8 +24,8 @@ export default function BuilderSteps() {
     () => makeSelectCountByCategory("sensors"),
     [],
   );
-  const selectExtrasCount = useMemo(
-    () => makeSelectCountByCategory("extras"),
+  const selectaccessoriesCount = useMemo(
+    () => makeSelectCountByCategory("accessories"),
     [],
   );
 
@@ -48,7 +48,7 @@ export default function BuilderSteps() {
   const cameraCount = useSelector(selectCameraCount);
   const planCount = useSelector(selectPlanCount);
   const sensorCount = useSelector(selectSensorCount);
-  const extrasCount = useSelector(selectExtrasCount);
+  const accessoriesCount = useSelector(selectaccessoriesCount);
   return (
     <div className="w-full xl:w-3xl h-244.5 rounded-[10px]  border-[#1F1F1F] bg-[#EDF4FF]">
       <StepAccordion
@@ -132,7 +132,7 @@ export default function BuilderSteps() {
         <div className="pt-3.75 pb-5 flex justify-center">
           <NextButton
             label="Next: Choose your plan"
-            onClick={() => toggleStep(1)}
+            onClick={() => toggleStep(2)}
           />
         </div>
       </StepAccordion>
@@ -171,7 +171,7 @@ export default function BuilderSteps() {
         <div className="pt-3.75 pb-5 flex justify-center">
           <NextButton
             label="Next: Choose your sensors"
-            onClick={() => toggleStep(2)}
+            onClick={() => toggleStep(3)}
           />
         </div>
       </StepAccordion>
@@ -252,7 +252,7 @@ export default function BuilderSteps() {
         <div className="pt-3.75 pb-5 flex justify-center">
           <NextButton
             label="Next: Add extra protection"
-            onClick={() => toggleStep(3)}
+            onClick={() => toggleStep(4)}
           />
         </div>
       </StepAccordion>
@@ -340,10 +340,24 @@ export default function BuilderSteps() {
           </svg>
         }
         isOpen={openStep === 4}
-        selectedSummary="1 selected"
+        selectedSummary={`${accessoriesCount} selected`}
         onToggle={() => toggleStep(4)}
       >
-        {/* CameraStep content goes here */}
+        <div className="flex gap-3.75 overflow-auto scrollbar-none pb-2 xl:grid xl:grid-cols-2 xl:overflow-visible px-3.75">
+          {productsData.accessories.map((accessor) => (
+            <ProductCard
+              key={accessor.id}
+              product={accessor}
+              category="accessories"
+            />
+          ))}
+        </div>
+        <div className="pt-3.75 pb-5 flex justify-center">
+          <NextButton
+            label="Next: Choose your plan"
+            onClick={() => toggleStep(1)}
+          />
+        </div>
       </StepAccordion>
     </div>
   );
