@@ -1,4 +1,4 @@
-import { Minus, Plus, Truck, ShieldCheck } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 
 /** +/- stepper. Greys out and disables when the item is required (fixed qty). */
 function QuantityStepper({ quantity, required, onDecrement, onIncrement }) {
@@ -105,6 +105,39 @@ function itemKey(item) {
   return item.id;
 }
 
+/**
+ * Plan rows get a two-tone name — first word plain dark text, the rest
+ * bold indigo (e.g. "Cam" / "Unlimited") — to match the plan-tile styling
+ * elsewhere in the flow. Non-plan rows (cameras, sensors, accessories)
+ * keep the plain single-color name; splitting "Wyze Cam Pan v3" the same
+ * way wouldn't read right.
+ */
+function ItemName({ item }) {
+  if (item.category !== "plans") {
+    return (
+      <span className="block w-39 whitespace-normal wrap-break-word font-['Gilroy-Medium'] font-normal text-[14px] leading-[16px] tracking-[0.005em] text-gray-900">
+        {item.name}
+        {item.required && <span className="text-gray-500"> (Required)</span>}
+      </span>
+    );
+  }
+
+  const [firstWord, ...rest] = item.name.split(" ");
+  const restText = rest.join(" ");
+
+  return (
+    <span className="block whitespace-normal wrap-break-word font-['Gilroy-SemiBold'] text-[16px] leading-[20px] tracking-[0.005em]">
+      <span className="text-gray-900">{firstWord}</span>
+      {restText && (
+        <span className="text-[#4E2FD2] font-bold"> {restText}</span>
+      )}
+      {item.required && (
+        <span className="text-gray-500 font-normal"> (Required)</span>
+      )}
+    </span>
+  );
+}
+
 export default function ReviewSection({ title, items, onQuantityChange }) {
   if (!items || items.length === 0) return null;
 
@@ -127,16 +160,11 @@ export default function ReviewSection({ title, items, onQuantityChange }) {
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="h-10.25 w-10.25  rounded-[5px] bg-white object-contain"
+                  className="h-10.25 w-10.25 object-contain rounded-[10px] bg-white"
                 />
               }
 
-              <span className="block w-39 whitespace-normal wrap-break-word font-['Gilroy-Medium'] font-normal text-[14px] leading-[16px] tracking-[0.005em] text-gray-900">
-                {item.name}
-                {item.required && (
-                  <span className="text-gray-500"> (Required)</span>
-                )}
-              </span>
+              <ItemName item={item} />
             </div>
 
             <div className="flex  items-center gap-4">
@@ -160,7 +188,9 @@ export default function ReviewSection({ title, items, onQuantityChange }) {
                 price={item.price}
                 originalPrice={item.originalPrice}
                 quantity={item.quantity}
-                billingPeriod={item.billingPeriod}
+                billingPeriod={
+                  item.category === "plans" ? "mo" : item.billingPeriod
+                }
               />
             </div>
           </div>
