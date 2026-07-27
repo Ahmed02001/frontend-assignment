@@ -143,7 +143,7 @@
       "defaultColor": "white",
       "originalPrice": 43.99,
       "salePrice": 29.99,
-      "defaultQuantity": 2,
+      "defaultQuantity": 0,
       "minQuantity": 0,
       "maxQuantity": 10
     },
@@ -164,15 +164,15 @@
       "defaultColor": "white",
       "originalPrice": 29.99,
       "salePrice": 0.0,
-      "defaultQuantity": 1,
-      "minQuantity": 1,
+      "defaultQuantity": 0,
+      "minQuantity": 0,
       "maxQuantity": 1
     },
     {
       "id": "wenzhiiot-presence-sensor",
       "badge": null,
       "name": "WenzhiIoT Zigbee Presence Sensor",
-      "tagline": "24GHz mmWave radar detects presence, motion, and light levels — with built-in 16A relay.",
+      "tagline": "24GHz mmWave radar detects presence, motion, and light levels.",
       "learnMoreUrl": "#",
       "mainImage": "/images/sensors/sensor3.png",
       "colors": [
@@ -193,10 +193,21 @@
       "id": "chtoocy-solar-motion-alarm",
       "badge": null,
       "name": "Chtoocy Solar Motion Sensor Alarm",
-      "tagline": "Radar + IR dual detection with 130dB alarm, dog-bark sound, and strobe light to deter intruders and animals.",
+      "tagline": "Radar + IR dual detection with 130dB alarm, dog-bark sound.",
       "learnMoreUrl": "#",
       "mainImage": "/images/sensors/sensor4.png",
-      "colors": [],
+      "colors": [
+        {
+          "id": "white",
+          "label": "White",
+          "image": "/images/sensors/sensor4.png"
+        },
+        {
+          "id": "gray",
+          "label": "gray",
+          "image": "/images/sensors/sensor4_1.png"
+        }
+      ],
       "defaultColor": null,
       "originalPrice": 30,
       "salePrice": 20.99,
@@ -207,34 +218,152 @@
   ],
   "accessories": [
     {
+      "id": "hP-gaming-mouse-g210",
+      "badge": null,
+      "name": "HP Gaming Mouse G210",
+      "tagline": "The HP Gaming Mouse G210 is designed for gamers looking for performance and comfort.",
+      "learnMoreUrl": null,
+      "mainImage": "/images/accessories/pro1.png",
+      "colors": [],
+      "defaultColor": null,
+      "originalPrice": null,
+      "salePrice": 20.98,
+      "defaultQuantity": 0,
+      "minQuantity": 0,
+      "maxQuantity": 10
+    },
+    {
       "id": "wyze-microsd-256",
       "badge": null,
       "name": "Wyze MicroSD Card (256GB)",
       "tagline": "Local storage for continuous recording.",
       "learnMoreUrl": null,
+      "mainImage": "/images/accessories/pro2.png",
       "colors": [],
       "defaultColor": null,
       "originalPrice": null,
-      "salePrice": 20.98,
-      "defaultQuantity": 2,
+      "salePrice": 18.98,
+      "defaultQuantity": 0,
+      "minQuantity": 0,
+      "maxQuantity": 10
+    },
+    {
+      "id": "headphone-lifechat-lx-3000",
+      "badge": null,
+      "name": "Headphone Lifechat Lx-3000",
+      "tagline": "The Microsoft LifeChat LX-3000 is a high-quality wired headset designed for clear communication",
+      "learnMoreUrl": null,
+      "mainImage": "/images/accessories/pro3.png",
+      "colors": [],
+      "defaultColor": null,
+      "originalPrice": null,
+      "salePrice": 18.98,
+      "defaultQuantity": 0,
       "minQuantity": 0,
       "maxQuantity": 10
     }
   ],
+
   "plans": [
     {
-      "id": "cam-unlimited",
-      "badge": "Save 23%",
-      "name": "Cam Unlimited",
-      "tagline": "Unlimited cloud storage for every connected camera.",
+      "id": "cam-basic",
+      "image": "/images/plans/plan_1.png",
+      "badge": null,
+      "featured": false,
+      "name": "Cam Basic",
+      "tagline": "A free starting point for exploring motion alerts.",
       "learnMoreUrl": null,
-      "colors": [],
-      "defaultColor": null,
+      "originalPrice": 0,
+      "salePrice": 0,
+      "defaultQuantity": 0,
+      "minQuantity": 0,
+      "maxQuantity": 1,
+      "features": [
+        "12-second motion-triggered clips",
+        "24-hour clip history",
+        "Push notifications",
+        "1 connected camera"
+      ]
+    },
+    {
+      "id": "cam-plus-lite",
+      "image": "/images/plans/plan_2.png",
+      "badge": "Save 17%",
+      "featured": false,
+      "name": "Cam Plus Lite",
+      "tagline": "Unlimited clips for a single camera.",
+      "learnMoreUrl": null,
+      "originalPrice": 2.99,
+      "salePrice": 2.49,
+      "defaultQuantity": 0,
+      "minQuantity": 0,
+      "maxQuantity": 1,
+      "features": [
+        "Everything in Basic, plus:",
+        "Unlimited-length clips",
+        "14-day clip history",
+        "No re-arm delay between events"
+      ]
+    },
+    {
+      "id": "cam-plus",
+      "image": "/images/plans/plan_3.png",
+      "badge": "Save 20%",
+      "featured": true,
+      "name": "Cam Plus",
+      "tagline": "Smarter detection for the one camera that matters most.",
+      "learnMoreUrl": null,
+      "originalPrice": 4.99,
+      "salePrice": 3.99,
+      "defaultQuantity": 0,
+      "minQuantity": 0,
+      "maxQuantity": 1,
+      "features": [
+        "Everything in Plus Lite, plus:",
+        "Person, vehicle & package detection",
+        "30-day clip history",
+        "Priority video processing"
+      ]
+    },
+    {
+      "id": "cam-unlimited",
+      "image": "/images/plans/plan_4.png",
+      "badge": "Save 23%",
+      "featured": false,
+      "name": "Cam Unlimited",
+      "tagline": "One plan, every camera on your account.",
+      "learnMoreUrl": null,
       "originalPrice": 12.99,
       "salePrice": 9.99,
       "defaultQuantity": 1,
-      "minQuantity": 1,
-      "maxQuantity": 1
+      "minQuantity": 0,
+      "maxQuantity": 1,
+      "features": [
+        "Everything in Cam Plus, plus:",
+        "Covers unlimited connected cameras",
+        "60-day clip history",
+        "Shared across your whole household"
+      ]
+    },
+    {
+      "id": "cam-protect-pro",
+      "image": "/images/plans/plan_5.png",
+      "badge": "Save 25%",
+      "featured": false,
+      "name": "Cam Protect Pro",
+      "tagline": "Enterprise-grade monitoring for total peace of mind.",
+      "learnMoreUrl": null,
+      "originalPrice": 19.99,
+      "salePrice": 14.99,
+      "defaultQuantity": 0,
+      "minQuantity": 0,
+      "maxQuantity": 1,
+      "features": [
+        "Everything in Unlimited, plus:",
+        "24/7 professional monitoring",
+        "Direct police & fire dispatch",
+        "90-day clip history"
+      ]
     }
   ],
   "extras": [
