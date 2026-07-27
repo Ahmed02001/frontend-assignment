@@ -31,24 +31,33 @@ function QuantityStepper({ quantity, required, onDecrement, onIncrement }) {
             : "bg-white text-neutral-600 hover:bg-neutral-100"
         }`}
       >
-        <Plus className="h-[8px] w-[8px] stroke-[2.5]" />
+        <Plus className="h-2 w-2 stroke-[2.5]" />
       </button>
     </div>
   );
 }
 
-// export default QuantityStepper;
-/** Right-aligned price block: grey strikethrough original (optional) + bold indigo current price. */
+/**
+ * Right-aligned price block: grey strikethrough original (optional) + bold
+ * indigo current price. `quantity` falls back to 1 for items with no
+ * quantity concept (e.g. a selected plan), instead of NaN-ing the math.
+ */
 function PriceBlock({ price, originalPrice, quantity, billingPeriod }) {
-  const lineOriginal = originalPrice != null ? originalPrice * quantity : null;
-  const lineCurrent = price * quantity;
+  // Use `||`, not `??` — `??` only replaces null/undefined, so a stray
+  // `quantity: 0` (which is what plans end up with, since nothing ever sets
+  // a real quantity on a plan's cart entry) would slip through unchanged and
+  // silently price everything as "free" (price * 0 = 0). `||` treats 0, NaN,
+  // null, and undefined all the same way: fall back to 1.
+  const qty = quantity || 1;
+  const lineOriginal = originalPrice != null ? originalPrice * qty : null;
+  const lineCurrent = price * qty;
   const isFree = lineCurrent === 0;
 
   return (
-    <div className="w-[41px] md:w-[101px] xl:w-[41px] flex flex-col md:flex-row xl:flex-col items-end md:items-center xl:items-end justify-center md:justify-end text-right font-['Gilroy-SemiBold'] font-normal text-[14px] leading-[16px] tracking-[0.005em]">
+    <div className="w-10.25 md:w-25.25 xl:w-10.25 flex flex-col md:flex-row xl:flex-col items-end md:items-center xl:items-end justify-center md:justify-end text-right font-['Gilroy-SemiBold'] font-normal text-[14px] leading-[16px] tracking-[0.005em]">
       {/* Original Price (Gray Strikethrough) */}
       {lineOriginal != null && lineOriginal > lineCurrent && (
-        <div className="text-[#6C757D] line-through mb-[2px] md:mb-0 md:mr-1.5 xl:mb-[2px] xl:mr-0">
+        <div className="text-[#6C757D] line-through mb-0.5 md:mb-0 md:mr-1.5 xl:mb-0.5 xl:mr-0">
           ${lineOriginal.toFixed(2)}
           {billingPeriod ? `/${billingPeriod}` : ""}
         </div>
@@ -81,6 +90,21 @@ function PriceBlock({ price, originalPrice, quantity, billingPeriod }) {
   );
 }
 
+// Stable per-row key, matching the same scheme buildVariantKey uses in
+// cartSlice.js. Cart items don't carry a generic `.id` field — they're
+// identified by `productId` (+ optional `color`, per the shape comment in
+// cartSlice.js's initialState — NOT `colorId`) — so keying rows by
+// `item.id` (or `item.colorId`) produced the same key for every row of a
+// given product, breaking React's ability to tell rows apart. Falls back
+// to `item.id` only for the rare item shape that might legitimately have
+// one and nothing else.
+function itemKey(item) {
+  if (item.productId) {
+    return item.color ? `${item.productId}::${item.color}` : item.productId;
+  }
+  return item.id;
+}
+
 export default function ReviewSection({ title, items, onQuantityChange }) {
   if (!items || items.length === 0) return null;
 
@@ -95,19 +119,19 @@ export default function ReviewSection({ title, items, onQuantityChange }) {
       <div className="flex flex-col gap-4">
         {items.map((item) => (
           <div
-            key={item.id}
+            key={itemKey(item)}
             className="flex items-center justify-between gap-3"
           >
             <div className="flex min-w-0 items-center gap-3">
-              {item.image && (
+              {
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="h-[41px] w-[41px]  rounded-[5px] bg-white object-contain"
+                  className="h-10.25 w-10.25  rounded-[5px] bg-white object-contain"
                 />
-              )}
+              }
 
-              <span className="block w-[156px] whitespace-normal break-words font-['Gilroy-Medium'] font-normal text-[14px] leading-[16px] tracking-[0.005em] text-gray-900">
+              <span className="block w-39 whitespace-normal wrap-break-word font-['Gilroy-Medium'] font-normal text-[14px] leading-[16px] tracking-[0.005em] text-gray-900">
                 {item.name}
                 {item.required && (
                   <span className="text-gray-500"> (Required)</span>
@@ -117,7 +141,7 @@ export default function ReviewSection({ title, items, onQuantityChange }) {
 
             <div className="flex  items-center gap-4">
               {Boolean(title?.trim()) &&
-                !["PLAN", "EXTRAS"].includes(title.trim().toUpperCase()) && (
+                !["PLANS", "EXTRAS"].includes(title.trim().toUpperCase()) && (
                   <QuantityStepper
                     quantity={item.quantity}
                     required={item.required}
