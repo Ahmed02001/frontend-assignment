@@ -6,7 +6,9 @@ import {
   selectOriginalTotal,
 } from "../redux/cartSelectors";
 import { setQuantity } from "../redux/cartSlice";
+import productsData from "@/data/products.json";
 import ReviewSection from "./ReviewSection";
+import ExtraLineItem from "./ExtraLineItem";
 
 export default function ReviewPanel() {
   const dispatch = useDispatch();
@@ -24,13 +26,11 @@ export default function ReviewPanel() {
     [],
   );
   const selectPlans = useMemo(() => makeSelectItemsByCategory("plans"), []);
-  const selectExtras = useMemo(() => makeSelectItemsByCategory("extras"), []);
 
   const cameras = useSelector(selectCameras);
   const sensors = useSelector(selectSensors);
   const accessories = useSelector(selectAccessories);
   const plans = useSelector(selectPlans);
-  const extras = useSelector(selectExtras);
   const total = useSelector(selectCartTotal);
   const originalTotal = useSelector(selectOriginalTotal);
 
@@ -97,11 +97,7 @@ export default function ReviewPanel() {
                 items={plans}
                 onQuantityChange={handleQuantityChange}
               />
-              <ReviewSection
-                title="Extras"
-                items={extras}
-                onQuantityChange={handleQuantityChange}
-              />
+              <ExtraLineItem item={productsData.extras[0]} />
             </div>
           </div>
         </div>
@@ -135,11 +131,11 @@ export default function ReviewPanel() {
               </div>
               <div>
                 {originalTotal > total && (
-                  <span className="font-['Gilroy-Medium'] font-normal text-[18px] leading-[20px] tracking-[0.0025em] text-center line-through text-[`#6F7882`] mr-2">
+                  <span className="font-['Gilroy-Medium'] font-normal text-[18px] leading-[20px] tracking-[0.0025em] text-center line-through text-[#6F7882] mr-2">
                     ${originalTotal.toFixed(2)}
                   </span>
                 )}
-                <span className="inline-block text-right align-middle font-['Gilroy-Bold'] font-normal text-[24px] leading-[32px] text-[`#4E2FD2`]">
+                <span className="inline-block text-right align-middle font-['Gilroy-Bold'] font-normal text-[24px] leading-[32px] text-[#4E2FD2]">
                   ${total.toFixed(2)}
                 </span>
               </div>

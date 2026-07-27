@@ -4,7 +4,9 @@ import productsData from "@/data/products.json";
 import ProductCard from "./ProductCard";
 import NextButton from "@components/NextButton.jsx";
 import { makeSelectCountByCategory } from "@/redux/cartSelectors";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import PlanCard from "./PlanCard";
+import { selectPlan } from "@/redux/cartSlice";
 
 export default function BuilderSteps() {
   const [openStep, setOpenStep] = useState(1);
@@ -26,6 +28,22 @@ export default function BuilderSteps() {
     () => makeSelectCountByCategory("extras"),
     [],
   );
+
+  ////////////////////
+
+  const dispatch = useDispatch();
+
+  // selectPlan needs the full sibling group (planIds) so it can clear
+  // `selected` on whichever plan was previously chosen — PlanCard itself
+  // only reports *which* id was clicked, it doesn't know about its
+  // siblings, so that has to be assembled here.
+  const PLAN_IDS = productsData.plans.map((plan) => plan.id);
+  const handleSelectPlan = (id) => {
+    const plan = productsData.plans.find((p) => p.id === id);
+    const defaults = { ...plan, price: plan.salePrice, billingPeriod: "mo" };
+    dispatch(selectPlan({ id, planIds: PLAN_IDS, defaults }));
+  };
+  ////////////////////
 
   const cameraCount = useSelector(selectCameraCount);
   const planCount = useSelector(selectPlanCount);
@@ -113,7 +131,7 @@ export default function BuilderSteps() {
         </div>
         <div className="pt-3.75 pb-5 flex justify-center">
           <NextButton
-            label="Next: Choose your sensors"
+            label="Next: Choose your plan"
             onClick={() => toggleStep(1)}
           />
         </div>
@@ -142,10 +160,20 @@ export default function BuilderSteps() {
           </svg>
         }
         isOpen={openStep === 2}
-        selectedSummary="1 selected"
+        selectedSummary={`${planCount} selected`}
         onToggle={() => toggleStep(2)}
       >
-        {/* CameraStep content goes here */}
+        <div className="flex gap-3.75 overflow-auto scrollbar-none pb-2 xl:grid xl:grid-cols-2 xl:overflow-visible px-3.75">
+          {productsData.plans.map((plan) => (
+            <PlanCard key={plan.id} plan={plan} onSelect={handleSelectPlan} />
+          ))}
+        </div>
+        <div className="pt-3.75 pb-5 flex justify-center">
+          <NextButton
+            label="Next: Choose your sensors"
+            onClick={() => toggleStep(2)}
+          />
+        </div>
       </StepAccordion>
       <StepAccordion
         stepNumber={3}

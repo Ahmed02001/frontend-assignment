@@ -8,15 +8,7 @@ import {
   Headset,
   Check,
 } from "lucide-react";
-// import { makeSelectPlan } from "../redux/cartSelectors"; // adjust path to your actual file
-
-const iconMap = {
-  cloud: <Cloud className="h-6 w-6" strokeWidth={1.75} />,
-  "cloud-off": <CloudOff className="h-6 w-6" strokeWidth={1.75} />,
-  "scan-face": <ScanFace className="h-6 w-6" strokeWidth={1.75} />,
-  infinity: <InfinityIcon className="h-6 w-6" strokeWidth={1.75} />,
-  headset: <Headset className="h-6 w-6" strokeWidth={1.75} />,
-};
+import { makeSelectPlan } from "../redux/cartSelectors"; // adjust path to your actual file
 
 /**
  * Novu-pricing-style plan tile: icon "image" up top, big price, full-width
@@ -43,7 +35,7 @@ export default function PlanCard({ plan, onSelect }) {
 
   return (
     <div
-      className={`relative rounded-2xl p-[2px] transition-colors ${
+      className={`relative rounded-[10px] p-[2px] transition-colors ${
         isSelected
           ? "bg-indigo-600"
           : plan.featured
@@ -58,7 +50,7 @@ export default function PlanCard({ plan, onSelect }) {
       )}
 
       <div
-        className={`flex h-full flex-col gap-4 min-w-68 rounded-2xl bg-white p-5 ${
+        className={`flex h-full flex-col gap-4 min-w-68 rounded-[10px] bg-white p-5 ${
           isSelected || plan.featured ? "shadow-lg shadow-indigo-100" : ""
         }`}
       >
@@ -74,7 +66,7 @@ export default function PlanCard({ plan, onSelect }) {
               <img
                 src={plan.image}
                 alt={plan.name}
-                className="h-full w-full rounded-xl"
+                className="h-full w-full rounded-[10px]"
               />
             }
           </div>
@@ -116,7 +108,7 @@ export default function PlanCard({ plan, onSelect }) {
         <button
           type="button"
           onClick={() => onSelect(plan.id)}
-          className={`flex w-full items-center justify-center gap-1.5 rounded-full py-2.5 text-sm font-semibold transition-colors ${
+          className={`flex w-full items-center justify-center gap-1.5 rounded-[10px] py-2.5 text-sm font-semibold transition-colors ${
             isSelected
               ? "bg-indigo-600 text-white"
               : plan.featured
