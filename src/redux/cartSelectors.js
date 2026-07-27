@@ -14,11 +14,14 @@ export const makeSelectItemsByCategory = (category) =>
     ),
   );
 
+// "N selected" counts DISTINCT PRODUCTS, not distinct variants — Red x2 and
+// Blue x3 of the same camera still count as 1 selected product, not 2,
+// since each variant entry carries the same productId.
 export const makeSelectCountByCategory = (category) =>
-  createSelector(
-    [makeSelectItemsByCategory(category)],
-    (items) => items.length,
-  );
+  createSelector([makeSelectItemsByCategory(category)], (items) => {
+    const distinctProductIds = new Set(items.map((item) => item.productId));
+    return distinctProductIds.size;
+  });
 
 export const selectCartTotal = createSelector([selectCart], (cart) =>
   Object.values(cart).reduce(
@@ -35,6 +38,10 @@ export const selectOriginalTotal = createSelector([selectCart], (cart) =>
   ),
 );
 
-// One item's own entry — used inside a single ProductCard
-export const makeSelectItem = (id) =>
-  createSelector([selectCart], (cart) => cart[id]);
+// One VARIANT's own entry (product + color combo) — used inside a single
+// ProductCard, keyed by whichever color is currently active on that card.
+export const makeSelectVariant = (productId, colorId) =>
+  createSelector([selectCart], (cart) => {
+    const key = colorId ? `${productId}::${colorId}` : productId;
+    return cart[key];
+  });

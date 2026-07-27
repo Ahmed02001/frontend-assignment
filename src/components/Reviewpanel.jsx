@@ -28,7 +28,6 @@ export default function ReviewPanel() {
 
   const cameras = useSelector(selectCameras);
   const sensors = useSelector(selectSensors);
-  console.log(cameras);
   const accessories = useSelector(selectAccessories);
   const plans = useSelector(selectPlans);
   const extras = useSelector(selectExtras);
@@ -37,11 +36,27 @@ export default function ReviewPanel() {
 
   const savings = originalTotal - total;
 
-  // `item` doubles as the `defaults` fallback the reducer uses if this id
-  // isn't in the cart slice yet (shouldn't normally happen here, since these
-  // items came from the cart selectors in the first place).
+  // `item` doubles as the `defaults` fallback the reducer uses if this
+  // variant isn't in the cart slice yet (shouldn't normally happen here,
+  // since these items came from the cart selectors in the first place).
+  //
+  // IMPORTANT: setQuantity keys entries via buildVariantKey(productId,
+  // colorId), and stored cart items carry that color as `item.color`
+  // (see the shape comment in cartSlice.js's initialState) — NOT
+  // `item.id` and NOT `item.colorId`. Passing either of those wrong names
+  // makes `colorId` resolve to undefined, so buildVariantKey silently
+  // drops the color and writes to the bare productId key instead of the
+  // item's real `productId::color` key — creating a second, colorless
+  // "duplicate" row instead of updating the one you clicked.
   const handleQuantityChange = (item, quantity) => {
-    dispatch(setQuantity({ id: item.id, quantity, defaults: item }));
+    dispatch(
+      setQuantity({
+        productId: item.productId,
+        colorId: item.color,
+        quantity,
+        defaults: item,
+      }),
+    );
   };
 
   return (
@@ -49,8 +64,8 @@ export default function ReviewPanel() {
       <p className="font-['Gilroy-Medium'] text-[12px] font-normal  leading-none tracking-[1.6px] align-middle uppercase text-slate-400 mb-2 px-3.75">
         REVIEW
       </p>
-      <div className="flex flex-col md:flex-row md:justify-evenly xl:flex-col p-5 gap-2.50">
-        <div className="md:max-w-[552px]">
+      <div className="flex flex-col md:flex-row md:justify-evenly xl:flex-col p-5 gap-[25px]">
+        <div className="md:w-[50%] xl:w-auto">
           <div>
             <h2 className="font-['Gilroy-SemiBold'] text-[22px] font-normal not-italic leading-none tracking-[0.6px] align-middle text-[#1F1F1F] mb-1.25">
               Your security system
@@ -78,7 +93,7 @@ export default function ReviewPanel() {
                 onQuantityChange={handleQuantityChange}
               />
               <ReviewSection
-                title="Plan"
+                title="Plans"
                 items={plans}
                 onQuantityChange={handleQuantityChange}
               />
@@ -91,7 +106,7 @@ export default function ReviewPanel() {
           </div>
         </div>
 
-        <div className=" flex flex-col justify-between md:justify-start xl:justify-between  md:w-121.5 xl:w-full">
+        <div className=" flex flex-col justify-between md:justify-start xl:justify-between  md:max-w-121.5 md:w-[50%] xl:w-full">
           {/* Seal + financing chip */}
           <div className="flex flex-row md:flex-col xl:flex-row justify-between ">
             <div className="flex flex-row gap-[25px] items-center">
@@ -102,7 +117,7 @@ export default function ReviewPanel() {
                   className="h-full w-full"
                 />
               </div>
-              <div className="w-82.5 hidden md:block xl:hidden">
+              <div className="w-82.5 md:w-[200px] hidden md:block xl:hidden">
                 <p className="align-middle font-['Gilroy-SemiBold'] font-normal text-[18px] leading-[110%] tracking-[0.6px]">
                   30-day hassle-free returns
                   <br />
