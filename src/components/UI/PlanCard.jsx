@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-import { useSelector } from "react-redux";
 import {
   Cloud,
   CloudOff,
@@ -8,27 +6,11 @@ import {
   Headset,
   Check,
 } from "lucide-react";
-import { makeSelectPlan } from "../../redux/cartSelectors"; // adjust path to your actual file
+import { usePlanSelection } from "@/hooks/usePlanSelection";
 import Badge from "./Badge";
 
-/**
- * Novu-pricing-style plan tile: icon "image" up top, big price, full-width
- * CTA pill, then a bullet feature list. The `featured` plan gets a subtle
- * gradient border + glow to stand out, same idea as Novu's highlighted "Pro"
- * card.
- *
- * `isSelected` now reads straight from Redux (via makeSelectPlan) instead of
- * being passed down as a prop — the parent no longer needs to compute it.
- * `onSelect` stays a prop: it's just "tell the parent which plan id was
- * clicked," and the parent still owns building `planIds`/`defaults` for the
- * dispatch.
- */
 export default function PlanCard({ plan, onSelect }) {
-  const selectPlanIsSelected = useMemo(
-    () => makeSelectPlan(plan.id),
-    [plan.id],
-  );
-  const isSelected = useSelector(selectPlanIsSelected);
+  const isSelected = usePlanSelection(plan.id);
 
   const isFree = plan.salePrice === 0.0;
   const hasDiscount =
@@ -63,13 +45,11 @@ export default function PlanCard({ plan, onSelect }) {
                 : "bg-neutral-100 text-neutral-500"
             }`}
           >
-            {
-              <img
-                src={plan.image}
-                alt={plan.name}
-                className="h-full w-full rounded-[10px]"
-              />
-            }
+            <img
+              src={plan.image}
+              alt={plan.name}
+              className="h-full w-full rounded-[10px]"
+            />
           </div>
           {plan.badge && (
             <Badge top={15} left={"70%"}>
