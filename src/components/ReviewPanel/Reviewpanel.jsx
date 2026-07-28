@@ -1,85 +1,42 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  makeSelectItemsByCategory,
   selectCartTotal,
   selectOriginalTotal,
 } from "../../redux/cartSelectors";
-import { setQuantity } from "../../redux/cartSlice";
 import productsData from "@/data/products.json";
+import { useCartCategory } from "@/hooks/useCartCategory";
+import { useQuantityChange } from "@/hooks/useQuantityChange";
 import ReviewSection from "./ReviewSection";
 import ExtraLineItem from "../UI/ExtraLineItem";
 
 export default function ReviewPanel() {
-  const dispatch = useDispatch();
   const [showCongrats, setShowCongrats] = useState(false);
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [showSaved, setShowSaved] = useState(false);
 
-  const handleCheckout = async () => {
-    if (isCheckingOut) return;
-    setIsCheckingOut(true);
-    try {
-      // Submit through the checkout flow. Replace this placeholder with the
-      // real checkout/navigation call once the backend endpoint is wired up;
-      // the congrats message must only appear after a successful checkout.
-      await submitCheckout();
-      setShowCongrats(true);
-    } catch {
-      // Checkout failed or was cancelled — keep the UI unchanged (no
-      // congratulatory message or savings display).
-    } finally {
-      setIsCheckingOut(false);
-    }
+  const handleCheckout = () => {
+    setShowCongrats(true);
+    // Add your checkout submission logic here
   };
 
-  // Placeholder for the real checkout submission/navigation. Resolves once
-  // the checkout operation completes successfully; rejects on failure so the
-  // success UI stays hidden.
-  const submitCheckout = () =>
-    new Promise((resolve) => {
-      // TODO: replace with the actual checkout API call / route navigation.
-      resolve();
-    });
+  // redux-persist already writes every cart change to localStorage as it
+  // happens, so there's technically nothing left to "do" here — the click
+  // just gives the shopper visible confirmation that their system really
+  // is saved and will be there when they come back.
+  const handleSaveForLater = () => {
+    setShowSaved(true);
+  };
 
-  const selectCameras = useMemo(() => makeSelectItemsByCategory("cameras"), []);
-  const selectSensors = useMemo(() => makeSelectItemsByCategory("sensors"), []);
-  const selectAccessories = useMemo(
-    () => makeSelectItemsByCategory("accessories"),
-    [],
-  );
-  const selectPlans = useMemo(() => makeSelectItemsByCategory("plans"), []);
+  const cameras = useCartCategory("cameras");
+  const sensors = useCartCategory("sensors");
+  const accessories = useCartCategory("accessories");
+  const plans = useCartCategory("plans");
 
-  const cameras = useSelector(selectCameras);
-  const sensors = useSelector(selectSensors);
-  const accessories = useSelector(selectAccessories);
-  const plans = useSelector(selectPlans);
   const total = useSelector(selectCartTotal);
   const originalTotal = useSelector(selectOriginalTotal);
-
   const savings = originalTotal - total;
 
-  // `item` doubles as the `defaults` fallback the reducer uses if this
-  // variant isn't in the cart slice yet (shouldn't normally happen here,
-  // since these items came from the cart selectors in the first place).
-  //
-  // IMPORTANT: setQuantity keys entries via buildVariantKey(productId,
-  // colorId), and stored cart items carry that color as `item.color`
-  // (see the shape comment in cartSlice.js's initialState) — NOT
-  // `item.id` and NOT `item.colorId`. Passing either of those wrong names
-  // makes `colorId` resolve to undefined, so buildVariantKey silently
-  // drops the color and writes to the bare productId key instead of the
-  // item's real `productId::color` key — creating a second, colorless
-  // "duplicate" row instead of updating the one you clicked.
-  const handleQuantityChange = (item, quantity) => {
-    dispatch(
-      setQuantity({
-        productId: item.productId ?? item.id,
-        colorId: item.color,
-        quantity,
-        defaults: item,
-      }),
-    );
-  };
+  const handleQuantityChange = useQuantityChange();
 
   return (
     <div className="w-full xl:w-99.75  rounded-[10px]  border-border bg-[#EDF4FF] pt-3.75">
@@ -176,19 +133,24 @@ export default function ReviewPanel() {
             <button
               type="button"
               onClick={handleCheckout}
-              disabled={isCheckingOut}
-              className=" w-full rounded-xl bg-indigo-700 py-4 text-xl font-bold text-white transition-colors hover:bg-indigo-800 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
+              className=" w-full rounded-xl bg-indigo-700 py-4 text-xl font-bold text-white transition-colors hover:bg-indigo-800 active:scale-[0.99]"
             >
-              {isCheckingOut ? "Processing…" : "Checkout"}
+              Checkout
             </button>
           </div>
 
           <button
             type="button"
+            onClick={handleSaveForLater}
             className=" w-full text-center text-sm italic text-gray-600 underline underline-offset-2 hover:text-gray-800"
           >
             Save my system for later
           </button>
+          {showSaved && (
+            <p className="mt-1 text-center text-xs font-['Gilroy-Medium'] text-[#12B76A]">
+              Saved — come back anytime and your system will be here.
+            </p>
+          )}
         </div>
       </div>
     </div>

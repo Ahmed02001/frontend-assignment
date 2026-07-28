@@ -44,7 +44,7 @@ function QuantityStepper({ quantity, required, onDecrement, onIncrement }) {
  * indigo current price. `quantity` falls back to 1 for items with no
  * quantity concept (e.g. a selected plan), instead of NaN-ing the math.
  */
-function PriceBlock({ price, originalPrice, quantity, billingPeriod }) {
+export function PriceBlock({ price, originalPrice, quantity, billingPeriod }) {
   // Use `||`, not `??` — `??` only replaces null/undefined, so a stray
   // `quantity: 0` (which is what plans end up with, since nothing ever sets
   // a real quantity on a plan's cart entry) would slip through unchanged and
@@ -114,7 +114,7 @@ function itemKey(item) {
  * keep the plain single-color name; splitting "Wyze Cam Pan v3" the same
  * way wouldn't read right.
  */
-function ItemName({ item }) {
+export function ItemName({ item }) {
   if (item.category !== CATEGORIES.PLANS) {
     return (
       <span className="block w-39 whitespace-normal wrap-break-word font-['Gilroy-Medium'] font-normal text-[14px] leading-[16px] tracking-[0.005em] text-gray-900">
