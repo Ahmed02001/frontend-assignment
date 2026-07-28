@@ -152,7 +152,7 @@ export default function ReviewSection({ title, items, onQuantityChange }) {
       <div className="flex flex-col gap-4">
         {items.map((item) => (
           <div
-            key={itemKey(item)}
+            key={item.id}
             className="flex items-center justify-between gap-3"
           >
             <div className="flex min-w-0 items-center gap-3">

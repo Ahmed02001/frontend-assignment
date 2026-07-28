@@ -376,9 +376,7 @@
       "image": "/images/shipping.png",
       "originalPrice": 5.99,
       "salePrice": 0.0,
-      "defaultQuantity": 1,
-      "minQuantity": 1,
-      "maxQuantity": 1
+      "thresholdPrice": 200
     }
   ]
 }
