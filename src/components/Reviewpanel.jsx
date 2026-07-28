@@ -51,7 +51,7 @@ export default function ReviewPanel() {
   const handleQuantityChange = (item, quantity) => {
     dispatch(
       setQuantity({
-        productId: item.productId,
+        productId: item.productId ?? item.id,
         colorId: item.color,
         quantity,
         defaults: item,
