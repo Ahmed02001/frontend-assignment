@@ -354,7 +354,7 @@ export default function BuilderSteps() {
         </div>
         <div className="pt-3.75 pb-5 flex justify-center">
           <NextButton
-            label="Next: Choose your plan"
+            label="Next: Choose your cameras"
             onClick={() => toggleStep(1)}
           />
         </div>

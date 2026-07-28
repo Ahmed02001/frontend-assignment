@@ -37,7 +37,11 @@ export default function ProductCard({ product, category }) {
   // back to the generic product image/name for colorless products.
   const activeColorObj = product.colors?.find((c) => c.id === activeColor);
   const displayName = product.name ?? product.product_name;
-  const currentImage = activeColorObj?.image || product.image;
+  // Single shared image fallback chain used by both the card render and
+  // the `defaults` dispatched to the store (so ReviewPanel shows the same
+  // image as the card): active color image → product.image → product.mainImage.
+  const currentImage =
+    activeColorObj?.image ?? product.image ?? product.mainImage ?? null;
 
   // Normalize price data ONCE here — handles both the flat-field catalog
   // shape (product.salePrice/originalPrice) and the older nested shape
@@ -49,7 +53,7 @@ export default function ProductCard({ product, category }) {
   const origPrice =
     product.originalPrice ?? product.price?.original_price ?? null;
   const hasDiscount = origPrice != null && origPrice > currentSalePrice;
-  const isFree = product.salePrice === 0.0;
+  const isFree = currentSalePrice === 0;
 
   // Everything the reducer needs the first time this variant is dispatched.
   // `name` includes the color label (e.g. "Wyze Cam v4 (Grey)") whenever
@@ -63,7 +67,9 @@ export default function ProductCard({ product, category }) {
       : displayName,
     // Use THIS variant's own image if it has one, falling back to the
     // generic product image only for colorless products (e.g. Doorbell).
-    image: activeColorObj?.image ?? product.mainImage ?? product.image ?? null,
+    // Reuses the shared `currentImage` chain so the card and ReviewPanel
+    // display identical images.
+    image: currentImage,
     price: currentSalePrice,
     originalPrice: origPrice,
     minQuantity: minQty,
@@ -140,7 +146,14 @@ export default function ProductCard({ product, category }) {
         tabIndex={0}
         onClick={handleCardClick}
         onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
+          // Only handle Enter/Space when the card itself is the target —
+          // ignore key events bubbling up from nested controls (stepper
+          // buttons, color swatches, Learn More link) so they keep their
+          // native activation behavior.
+          if (
+            (e.key === "Enter" || e.key === " ") &&
+            e.target === e.currentTarget
+          ) {
             e.preventDefault();
             handleCardClick();
           }
@@ -164,7 +177,7 @@ export default function ProductCard({ product, category }) {
 
           {/* Product Main Image centered inside */}
           <img
-            src={currentImage || product.mainImage}
+            src={currentImage}
             alt={displayName}
             className="w-full h-full object-contain transition-all duration-200"
           />
@@ -187,8 +200,10 @@ export default function ProductCard({ product, category }) {
                   {" "}
                   <a
                     href={
-                      typeof product.learnMoreUrl === "string"
-                        ? product.learnMoreUrl
+                      typeof (
+                        product.learnMoreUrl ?? product.learn_more_link
+                      ) === "string"
+                        ? (product.learnMoreUrl ?? product.learn_more_link)
                         : "#"
                     }
                     onClick={(e) => e.stopPropagation()}

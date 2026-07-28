@@ -182,7 +182,10 @@ export default function ReviewSection({ title, items, onQuantityChange }) {
                       )
                     }
                     onIncrement={() =>
-                      onQuantityChange(item, item.quantity + 1)
+                      onQuantityChange(
+                        item,
+                        Math.min(item.quantity + 1, item.maxQuantity ?? 99),
+                      )
                     }
                   />
                 )}
