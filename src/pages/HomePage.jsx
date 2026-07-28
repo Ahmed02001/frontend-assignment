@@ -9,7 +9,7 @@ export default function HomePage() {
   useSeedCart();
 
   return (
-    <div className="flex flex-col xl:flex-row gap-6 p-6">
+    <div className="flex flex-col xl:flex-row lg:gap-6 items-stretch lg:items-start justify-center lg:p-6">
       <BuilderSteps />
       <ReviewPanel />
     </div>
