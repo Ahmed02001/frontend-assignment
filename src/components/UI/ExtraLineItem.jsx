@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { selectOriginalTotal } from "../redux/cartSelectors";
+import { selectOriginalTotal } from "../../redux/cartSelectors";
 
 // Renders one "extras" line item (e.g. Fast Shipping) purely from JSON data.
 // Nothing here is hardcoded — pass in the object straight from your

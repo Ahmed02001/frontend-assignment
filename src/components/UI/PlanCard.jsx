@@ -8,7 +8,8 @@ import {
   Headset,
   Check,
 } from "lucide-react";
-import { makeSelectPlan } from "../redux/cartSelectors"; // adjust path to your actual file
+import { makeSelectPlan } from "../../redux/cartSelectors"; // adjust path to your actual file
+import Badge from "./Badge";
 
 /**
  * Novu-pricing-style plan tile: icon "image" up top, big price, full-width
@@ -29,7 +30,7 @@ export default function PlanCard({ plan, onSelect }) {
   );
   const isSelected = useSelector(selectPlanIsSelected);
 
-  const isFree = plan.salePrice === 0;
+  const isFree = plan.salePrice === 0.0;
   const hasDiscount =
     plan.originalPrice != null && plan.originalPrice > plan.salePrice;
 
@@ -71,9 +72,9 @@ export default function PlanCard({ plan, onSelect }) {
             }
           </div>
           {plan.badge && (
-            <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
+            <Badge top={15} left={"70%"}>
               {plan.badge}
-            </span>
+            </Badge>
           )}
         </div>
 

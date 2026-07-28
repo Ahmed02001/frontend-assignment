@@ -4,11 +4,11 @@ import {
   makeSelectItemsByCategory,
   selectCartTotal,
   selectOriginalTotal,
-} from "../redux/cartSelectors";
-import { setQuantity } from "../redux/cartSlice";
+} from "../../redux/cartSelectors";
+import { setQuantity } from "../../redux/cartSlice";
 import productsData from "@/data/products.json";
 import ReviewSection from "./ReviewSection";
-import ExtraLineItem from "./ExtraLineItem";
+import ExtraLineItem from "../UI/ExtraLineItem";
 
 export default function ReviewPanel() {
   const dispatch = useDispatch();

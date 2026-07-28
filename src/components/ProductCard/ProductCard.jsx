@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Minus, Plus } from "lucide-react";
-import ColorSelector from "./ColorSelector";
-import { setQuantity, toggleCardSelected } from "../redux/cartSlice";
-import { makeSelectVariant } from "../redux/cartSelectors";
+import { makeSelectVariant } from "@/redux/cartSelectors";
+import { setQuantity, toggleCardSelected } from "@/redux/cartSlice";
+import ColorSelector from "../UI/ColorSelector";
+import Badge from "../UI/Badge";
 
 export default function ProductCard({ product, category }) {
   const dispatch = useDispatch();
@@ -32,9 +33,23 @@ export default function ProductCard({ product, category }) {
   const quantity = item?.quantity ?? 0;
   const isCardSelected = quantity > minQty;
 
-  // Resolve current active image based on selected color or product main image
+  // Resolve current active image/name based on selected color, falling
+  // back to the generic product image/name for colorless products.
   const activeColorObj = product.colors?.find((c) => c.id === activeColor);
+  const displayName = product.name ?? product.product_name;
   const currentImage = activeColorObj?.image || product.image;
+
+  // Normalize price data ONCE here — handles both the flat-field catalog
+  // shape (product.salePrice/originalPrice) and the older nested shape
+  // (product.price.sale_price/original_price). Both `defaults` (used when
+  // dispatching to the store) and the on-screen price display below reuse
+  // these same two values, so there's exactly one place computing the
+  // fallback chain instead of two copies that could drift out of sync.
+  const currentSalePrice = product.salePrice ?? product.price?.sale_price ?? 0;
+  const origPrice =
+    product.originalPrice ?? product.price?.original_price ?? null;
+  const hasDiscount = origPrice != null && origPrice > currentSalePrice;
+  const isFree = product.salePrice === 0.0;
 
   // Everything the reducer needs the first time this variant is dispatched.
   // `name` includes the color label (e.g. "Wyze Cam v4 (Grey)") whenever
@@ -44,16 +59,13 @@ export default function ProductCard({ product, category }) {
     productId: product.id,
     category,
     name: activeColorObj
-      ? `${product.name ?? product.product_name} (${activeColorObj.label})`
-      : (product.name ?? product.product_name),
+      ? `${displayName} (${activeColorObj.label})`
+      : displayName,
     // Use THIS variant's own image if it has one, falling back to the
     // generic product image only for colorless products (e.g. Doorbell).
-    // Previously this always used product.mainImage regardless of color,
-    // which is why every variant showed the same picture in ReviewPanel.
     image: activeColorObj?.image ?? product.mainImage ?? product.image ?? null,
-    price: product.salePrice ?? product.price?.sale_price ?? 0,
-    originalPrice:
-      product.originalPrice ?? product.price?.original_price ?? null,
+    price: currentSalePrice,
+    originalPrice: origPrice,
     minQuantity: minQty,
     maxQuantity: maxQty,
     color: activeColor,
@@ -121,10 +133,6 @@ export default function ProductCard({ product, category }) {
     setActiveColor(colorId);
   };
 
-  // Normalize price data handling both direct properties & nested price objects
-  const origPrice = product.originalPrice ?? product.price?.original_price;
-  const currentSalePrice = product.salePrice ?? product.price?.sale_price ?? 0;
-
   return (
     <div className="flex items-center justify-center">
       <div
@@ -149,26 +157,15 @@ export default function ProductCard({ product, category }) {
         <div className="relative flex w-full aspect-[202.6/117.394] shrink-0 flex-col items-center justify-center rounded-[5px] overflow-hidden xl:w-25.25 xl:h-34.25 xl:aspect-auto">
           {/* Badge overlaid at top-left */}
           {product.badge && (
-            <span
-              className="
-      absolute top-0 left-0 z-10 
-      inline-flex items-center justify-center
-      w-16.25 h-4.75 gap-2.5
-      opacity-100 rounded-[10px]
-      py-0.5 px-1.5
-      bg-[#4E2FD2] text-white 
-      font-['Gilroy-SemiBold'] font-normal text-[12px] leading-none
-      box-border rotate-0
-    "
-            >
+            <Badge top={0} left={0}>
               {product.badge}
-            </span>
+            </Badge>
           )}
 
           {/* Product Main Image centered inside */}
           <img
             src={currentImage || product.mainImage}
-            alt={product.name || product.product_name}
+            alt={displayName}
             className="w-full h-full object-contain transition-all duration-200"
           />
         </div>
@@ -178,7 +175,7 @@ export default function ProductCard({ product, category }) {
           <div>
             {/* Title */}
             <h2 className="font-['Gilroy-SemiBold'] font-normal text-[16px] leading-none tracking-[0.6px] text-neutral-900 truncate align-middle mb-1.5">
-              {product.product_name || product.name}
+              {displayName}
             </h2>
 
             {/* Tagline + Learn More — flow inline together on mobile/tablet,
@@ -253,18 +250,18 @@ export default function ProductCard({ product, category }) {
             {/* Pricing Section */}
             <div className="flex sm:flex-row xl:flex-col items-end justify-center text-right ">
               {/* Original Price (Strikethrough Red) */}
-              {origPrice && (
+              {hasDiscount && (
                 <div className="font-['Gilroy-Regular'] text-[16px] font-400 text-[#D9383A] line-through leading-none xl:mb-0.5 md:mr-1.25 xl:mr-0">
-                  ${Number(origPrice).toFixed(2)}
+                  ${origPrice.toFixed(2)}
                 </div>
               )}
 
               {/* Current Sale Price (Split Styling: Light $ + Bold Number) */}
               <div className="font-['Gilroy-Regular'] text-[16px] leading-none text-[#404040]">
                 <span className="font-['Gilroy-Regular'] font-400 text-[16px]">
-                  $
+                  {isFree ? "" : "$"}
                 </span>
-                {Number(currentSalePrice).toFixed(2)}
+                {isFree ? "Free" : currentSalePrice.toFixed(2)}
               </div>
             </div>
           </div>

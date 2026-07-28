@@ -1,3 +1,5 @@
+import { buildVariantKey } from "@/utils/Cartkey";
+import { CATEGORIES } from "@/utils/Constants";
 import { createSelector } from "@reduxjs/toolkit";
 
 // Base selector — the raw cart slice
@@ -15,11 +17,11 @@ function isActiveItem(item) {
   // Without this branch, deselecting a plan (selected -> false) wouldn't
   // remove it from Review if quantity was ever truthy — it would look
   // "stuck" selected no matter what you picked afterward.
-  if (item.category === "plans") return item.selected === true;
+  if (item.category === CATEGORIES.PLANS) return item.selected === true;
   return item.quantity > 0 || item.selected === true;
 }
 function effectiveQuantity(item) {
-  if (item.category === "plans") return item.selected ? 1 : 0;
+  if (item.category === CATEGORIES.PLANS) return item.selected ? 1 : 0;
   return item.quantity ?? (item.selected ? 1 : 0);
 }
 
@@ -87,13 +89,9 @@ export const selectOriginalTotal = createSelector([selectCart], (cart) =>
 
 // One VARIANT's own entry (product + color combo) — used inside a single
 // ProductCard, keyed by whichever color is currently active on that card.
-// NOTE: assumes productId never contains the "::" substring; if that's not
-// guaranteed elsewhere in the codebase, prefer an array/tuple key or a
-// character that can't appear in an id (e.g. a control character or a
-// dedicated separator constant shared with wherever `cart` keys are written).
 export const makeSelectVariant = (productId, colorId) =>
   createSelector([selectCart], (cart) => {
-    const key = colorId ? `${productId}::${colorId}` : productId;
+    const key = buildVariantKey(productId, colorId);
     return cart[key];
   });
 
@@ -110,6 +108,6 @@ export const makeSelectPlan = (planId) =>
 // unchanged — no extra equality check needed.
 export const selectSelectedPlan = createSelector([selectCart], (cart) =>
   Object.values(cart).find(
-    (item) => item.category === "plans" && item.selected === true,
+    (item) => item.category === CATEGORIES.PLANS && item.selected === true,
   ),
 );
