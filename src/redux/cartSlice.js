@@ -1,3 +1,4 @@
+import { buildVariantKey } from "@/utils/Cartkey";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -7,11 +8,6 @@ const initialState = {
   //   "wyze-cam-v4::black" -> { productId, category, color, quantity, image, price, originalPrice, cardSelected }
   // Products with no color options just use the bare productId as the key.
 };
-
-// Builds the cart key for a given product + color combo.
-function buildVariantKey(productId, colorId) {
-  return colorId ? `${productId}::${colorId}` : productId;
-}
 
 const cartSlice = createSlice({
   name: "cart",

@@ -1,11 +1,11 @@
 import { useState, useMemo } from "react";
-import StepAccordion from "@/components/StepAccordion.jsx";
+import StepAccordion from "@/components/StepAccordion/StepAccordion.jsx";
 import productsData from "@/data/products.json";
-import ProductCard from "./ProductCard";
-import NextButton from "@components/NextButton.jsx";
+import ProductCard from "./ProductCard/ProductCard";
+import NextButton from "@/components/UI/NextButton.jsx";
 import { makeSelectCountByCategory } from "@/redux/cartSelectors";
 import { useDispatch, useSelector } from "react-redux";
-import PlanCard from "./PlanCard";
+import PlanCard from "./UI/PlanCard";
 import { selectPlan } from "@/redux/cartSlice";
 
 export default function BuilderSteps() {
@@ -50,7 +50,7 @@ export default function BuilderSteps() {
   const sensorCount = useSelector(selectSensorCount);
   const accessoriesCount = useSelector(selectaccessoriesCount);
   return (
-    <div className="w-full xl:w-3xl h-244.5 rounded-[10px]  border-[#1F1F1F] bg-[#EDF4FF]">
+    <div className="w-full xl:w-3xl  rounded-[10px]  border-[#1F1F1F] bg-[#EDF4FF]">
       <StepAccordion
         stepNumber={1}
         title="Choose your cameras"
@@ -354,7 +354,7 @@ export default function BuilderSteps() {
         </div>
         <div className="pt-3.75 pb-5 flex justify-center">
           <NextButton
-            label="Next: Choose your plan"
+            label="Next: Choose your cameras"
             onClick={() => toggleStep(1)}
           />
         </div>

@@ -1,3 +1,5 @@
+import { buildVariantKey } from "@/utils/Cartkey";
+import { CATEGORIES } from "@/utils/Constants";
 import { Minus, Plus } from "lucide-react";
 
 /** +/- stepper. Greys out and disables when the item is required (fixed qty). */
@@ -100,7 +102,7 @@ function PriceBlock({ price, originalPrice, quantity, billingPeriod }) {
 // one and nothing else.
 function itemKey(item) {
   if (item.productId) {
-    return item.color ? `${item.productId}::${item.color}` : item.productId;
+    return buildVariantKey(item.productId, item.color);
   }
   return item.id;
 }
@@ -113,7 +115,7 @@ function itemKey(item) {
  * way wouldn't read right.
  */
 function ItemName({ item }) {
-  if (item.category !== "plans") {
+  if (item.category !== CATEGORIES.PLANS) {
     return (
       <span className="block w-39 whitespace-normal wrap-break-word font-['Gilroy-Medium'] font-normal text-[14px] leading-[16px] tracking-[0.005em] text-gray-900">
         {item.name}
@@ -152,7 +154,7 @@ export default function ReviewSection({ title, items, onQuantityChange }) {
       <div className="flex flex-col gap-4">
         {items.map((item) => (
           <div
-            key={item.id}
+            key={itemKey(item)}
             className="flex items-center justify-between gap-3"
           >
             <div className="flex min-w-0 items-center gap-3">
@@ -180,7 +182,10 @@ export default function ReviewSection({ title, items, onQuantityChange }) {
                       )
                     }
                     onIncrement={() =>
-                      onQuantityChange(item, item.quantity + 1)
+                      onQuantityChange(
+                        item,
+                        Math.min(item.quantity + 1, item.maxQuantity ?? 99),
+                      )
                     }
                   />
                 )}
@@ -189,7 +194,7 @@ export default function ReviewSection({ title, items, onQuantityChange }) {
                 originalPrice={item.originalPrice}
                 quantity={item.quantity}
                 billingPeriod={
-                  item.category === "plans" ? "mo" : item.billingPeriod
+                  item.category === CATEGORIES.PLANS ? "mo" : item.billingPeriod
                 }
               />
             </div>
